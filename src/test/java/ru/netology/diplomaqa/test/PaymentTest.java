@@ -1,6 +1,8 @@
 package ru.netology.diplomaqa.test;
 
 
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.diplomaqa.data.DataHelper;
 import ru.netology.diplomaqa.data.SQLHelper;
@@ -10,6 +12,16 @@ import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PaymentTest {
+
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
     DashboardPage pageMain = new DashboardPage();
 
     @BeforeEach

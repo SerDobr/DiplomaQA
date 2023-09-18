@@ -10,15 +10,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class SQLHelper {
-    private static final String URL = System.getProperty("db.url");
-    private static final String USERNAME = System.getProperty("db.username");
-    private static final String PASSWORD = System.getProperty("db.password");
+
     private static Connection connect;
-    private static QueryRunner runner = new QueryRunner();
 
     private static Connection getConnection() {
         try {
-            connect = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+            connect = DriverManager.getConnection("jdbc:postgresql://localhost:5432/app", "app", "pass");
+            // jdbc:mysql://localhost:3306/app, "app", "pass"
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -26,6 +24,7 @@ public class SQLHelper {
     }
 
     public static String getPaymentStatus() {
+        var runner = new QueryRunner();
         var payStatus = "SELECT status FROM payment_entity ORDER BY created DESC LIMIT 1";
 
         try (var connect = getConnection()) {
@@ -41,6 +40,7 @@ public class SQLHelper {
         var payAmount = "SELECT amount FROM payment_entity ORDER BY created DESC LIMIT 1";
 
         try (var connect = getConnection()) {
+            var runner = new QueryRunner();
             var paymentAmount = runner.query(connect, payAmount, new BeanHandler<>(Payment.class));
             return paymentAmount.getAmount();
         } catch (SQLException sqlException) {
@@ -50,6 +50,7 @@ public class SQLHelper {
     }
 
     public static String getCreditStatus() {
+        var runner = new QueryRunner();
         var cStatus = "SELECT status FROM credit_request_entity ORDER BY created DESC LIMIT 1";
 
         try (var connect = getConnection()) {

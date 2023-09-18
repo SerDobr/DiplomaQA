@@ -1,6 +1,8 @@
 package ru.netology.diplomaqa.test;
 
 
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
 import org.junit.jupiter.api.*;
 import ru.netology.diplomaqa.data.DataHelper;
 import ru.netology.diplomaqa.data.SQLHelper;
@@ -10,13 +12,22 @@ import static com.codeborne.selenide.Selenide.open;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CreditTest {
+
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
+
     DashboardPage pageMain = new DashboardPage();
 
     @BeforeEach
     void openForTests() {
         open("http://localhost:8080");
     }
-
 
     @Test
     @DisplayName("Тест с APPROVED картой и валидными данными")
@@ -47,8 +58,8 @@ public class CreditTest {
         var approvedInfo = DataHelper.getApprovedCardInfo();
         payForm.fillingForm(approvedInfo);
         payForm.checkOperationIsApproved();
-        String dataSQLPayAmount = SQLHelper.getCreditStatus();
-        assertEquals("4500000", dataSQLPayAmount);
+        String dataSQLPayAmount = SQLHelper.getPaymentAmount();
+        assertEquals("4500  000", dataSQLPayAmount);
     }
 
 
@@ -72,7 +83,7 @@ public class CreditTest {
     }
 
     @Test
-    @DisplayName("Тест невалидного месяца")
+    @DisplayName("Тест с 00 месяцем ")
     void shouldCheckTheInvalidMonthZero() {
         var payForm = pageMain.payCreditByCard();
         var invalidMonth = DataHelper.getInvalidMonthZeroInfo();

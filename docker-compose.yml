@@ -12,16 +12,16 @@ services:
       - MYSQL_PASSWORD=pass
     ports:
       - '3306:3306'
-
   postgres:
-   image: postgres:12.0-alpine
-   ports:
-    - '5432:5432'
-   environment:
-    - POSTGRES_RANDOM_ROOT_PASSWORD=yes
-    - POSTGRES_DB=app
-    - POSTGRES_USER=app
-    - POSTGRES_PASSWORD=pass
+    image: postgres:12.0-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_RANDOM_ROOT_PASSWORD=yes
+      - POSTGRES_DB=app
+      - POSTGRES_USER=app
+      - POSTGRES_PASSWORD=pass
+
 
   gate-simulator:
     build: gate-simulator/
