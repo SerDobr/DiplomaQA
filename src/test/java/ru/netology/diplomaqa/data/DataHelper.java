@@ -28,6 +28,12 @@ public class DataHelper {
         return "08";
     }
 
+    public static String getSpecialSymbols() {
+        return "~#@$%^&*(){}?>";
+    }
+    public static String getNumbers() {
+        return "123456789";
+    }
     public static String getInvalidMonth() {
         return "99";
     }
@@ -39,6 +45,7 @@ public class DataHelper {
     public static String getEmptyMonthValue() {
         return " ";
     }
+
 
     public static String getValidYear() {
         LocalDate year = LocalDate.now();
@@ -128,10 +135,37 @@ public class DataHelper {
                 getEmptyOwnerValue(), getEmptyCvvValue());
     }
 
+    public static CardInfo getEmptyCardNumber() {
+        return new CardInfo(getEmptyCardNumberValue(), getValidMonth(), getValidYear(), getValidOwnerCard(), getValidCvv());
+    }
 
-    public static CardInfo getInvalidCardForm() {
-        return new CardInfo(getInvalidCardNumber(), getInvalidMonth(), getInvalidYear(),
-                getInvalidOwnerCard(), getInvalidCvv());
+    public static CardInfo getEmptyMonth() {
+        return new CardInfo(getApprovedCardNumber(), getEmptyMonthValue(), getValidYear(), getValidOwnerCard(), getValidCvv());
+    }
+
+    public static CardInfo getEmptyYear() {
+        return new CardInfo(getApprovedCardNumber(), getValidMonth(), getEmptyYearValue(), getValidOwnerCard(), getValidCvv());
+    }
+
+    public static CardInfo getEmptyOwner() {
+        return new CardInfo(getApprovedCardNumber(), getValidMonth(), getValidYear(), getEmptyOwnerValue(), getValidCvv());
+    }
+
+    public static CardInfo getEmptyCVC() {
+        return new CardInfo(getApprovedCardNumber(), getValidMonth(), getValidYear(), getValidOwnerCard(), getEmptyCvvValue());
+    }
+
+    public static CardInfo getWrongCVC() {
+        return new CardInfo(getApprovedCardNumber(), getValidMonth(), getValidYear(), getValidOwnerCard(), getInvalidCvv());
+    }
+
+    public static CardInfo getSpecialSymbolsOwner() {
+        return new CardInfo(getApprovedCardNumber(), getValidMonth(), getValidYear(),
+                getSpecialSymbols(), getValidCvv());
+    }
+    public static CardInfo getNumbersOwner() {
+        return new CardInfo(getApprovedCardNumber(), getValidMonth(), getValidYear(),
+                getNumbers(), getValidCvv());
     }
 
     @Value

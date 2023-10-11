@@ -11,12 +11,14 @@ import java.sql.SQLException;
 
 public class SQLHelper {
 
+    private static final String URL = System.getProperty("dbUrl");
+
     private static Connection connect;
 
     private static Connection getConnection() {
+
         try {
-            connect = DriverManager.getConnection("jdbc:postgresql://localhost:5432/app", "app", "pass");
-            // jdbc:mysql://localhost:3306/app, "app", "pass"
+            connect = DriverManager.getConnection(URL, "app", "pass");
         } catch (SQLException sqlException) {
             sqlException.printStackTrace();
         }
@@ -37,10 +39,10 @@ public class SQLHelper {
     }
 
     public static String getPaymentAmount() {
+        var runner = new QueryRunner();
         var payAmount = "SELECT amount FROM payment_entity ORDER BY created DESC LIMIT 1";
 
         try (var connect = getConnection()) {
-            var runner = new QueryRunner();
             var paymentAmount = runner.query(connect, payAmount, new BeanHandler<>(Payment.class));
             return paymentAmount.getAmount();
         } catch (SQLException sqlException) {

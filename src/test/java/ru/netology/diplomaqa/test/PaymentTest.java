@@ -17,18 +17,25 @@ public class PaymentTest {
     static void setUpAll() {
         SelenideLogger.addListener("allure", new AllureSelenide());
     }
+
     @AfterAll
     static void tearDownAll() {
         SelenideLogger.removeListener("allure");
     }
 
-    DashboardPage pageMain = new DashboardPage();
 
     @BeforeEach
     void openForTests() {
         open("http://localhost:8080");
     }
 
+    DashboardPage pageMain = new DashboardPage();
+
+    @Test
+    @DisplayName("Тест загрузки вкладки Купить")
+    void shouldCheckTheDownloadOfThePaymentByCard() {
+        pageMain.payByDebitCard();
+    }
 
     @Test
     @DisplayName("Тест с APPROVED картой и валидными данными")
@@ -65,7 +72,7 @@ public class PaymentTest {
 
 
     @Test
-    @DisplayName("Тест невалидной карты")
+    @DisplayName("Тест невалидной картой")
     void shouldheckTheInvalidCard() {
         var payForm = pageMain.payByDebitCard();
         var invalidCardNumber = DataHelper.getInvalidCardNumberInfo();
@@ -83,7 +90,7 @@ public class PaymentTest {
     }
 
     @Test
-    @DisplayName("Тест невалидного месяца")
+    @DisplayName("Тест невалидного нулевого месяца")
     void shouldCheckTheInvalidMonthZero() {
         var payForm = pageMain.payByDebitCard();
         var invalidMonth = DataHelper.getInvalidMonthZeroInfo();
@@ -115,7 +122,7 @@ public class PaymentTest {
         var payForm = pageMain.payByDebitCard();
         var invalidOwner = DataHelper.getInvalidOwnerInfo();
         payForm.fillFormNoSendRequest(invalidOwner);
-        payForm.checkWrongFormat();
+        payForm.checkIfWrongFormatOfField();
     }
 
     @Test
@@ -124,32 +131,81 @@ public class PaymentTest {
         var payForm = pageMain.payByDebitCard();
         var emptyFields = DataHelper.getEmptyFields();
         payForm.fillFormNoSendRequest(emptyFields);
-        payForm.checkWrongFormat();
+        payForm.checkIfWrongFormatOfField();
         payForm.checkRequiredField();
     }
 
     @Test
-    @DisplayName("Тест отправить сперва пустую форму заявки, затем заполнить валидными данными и отправить повторно")
-    void shouldSendTheFormEmptyAndThenWithTheOwnersData() {
+    @DisplayName("Тест отправка с пустым полем Номера карты ")
+    void shouldSendAnEmptyFormNumberCards() {
         var payForm = pageMain.payByDebitCard();
-        var emptyFields = DataHelper.getEmptyFields();
-        var approvedInfo = DataHelper.getApprovedCardInfo();
-        payForm.fillFormNoSendRequest(emptyFields);
-        payForm.checkWrongFormat();
-        payForm.checkRequiredField();
-        payForm.fillingForm(approvedInfo);
-        payForm.checkOperationIsApproved();
+        var approvedInfo = DataHelper.getEmptyCardNumber();
+        payForm.fillFormNoSendRequest(approvedInfo);
+        payForm.checkIfWrongFormatOfField();
+
     }
 
     @Test
-    @DisplayName("Тест с невалидными данными всех полей")
-    void shouldBeCheckedWithInvalidDataOfAllFields() {
+    @DisplayName("Тест отправка с пустым полем Месяц ")
+    void shouldSendAnEmptyFormMonth() {
         var payForm = pageMain.payByDebitCard();
-        var invalidValue = DataHelper.getInvalidCardForm();
-        payForm.fillFormNoSendRequest(invalidValue);
-        payForm.checkInvalidMonth();
-        payForm.checkInvalidYear();
-        payForm.checkInvalidOwner();
-        payForm.checkInvalidCvv();
+        var approvedInfo = DataHelper.getEmptyMonth();
+        payForm.fillFormNoSendRequest(approvedInfo);
+        payForm.checkIfWrongFormatOfField();
+
+    }
+
+    @Test
+    @DisplayName("Тест отправка с пустым полем Год ")
+    void shouldSendAnEmptyFormYear() {
+        var payForm = pageMain.payByDebitCard();
+        var approvedInfo = DataHelper.getEmptyYear();
+        payForm.fillFormNoSendRequest(approvedInfo);
+        payForm.checkIfWrongFormatOfField();
+    }
+
+    @Test
+    @DisplayName("Тест отправка с пустым полем Владелец ")
+    void shouldSendAnEmptyFormOwner() {
+        var payForm = pageMain.payByDebitCard();
+        var approvedInfo = DataHelper.getEmptyOwner();
+        payForm.fillFormNoSendRequest(approvedInfo);
+        payForm.checkIfWrongFormatOfField();
+    }
+
+    @Test
+    @DisplayName("Тест отправка с пустым полем CVC ")
+    void shouldSendAnEmptyFormCVC() {
+        var payForm = pageMain.payByDebitCard();
+        var approvedInfo = DataHelper.getEmptyCVC();
+        payForm.fillFormNoSendRequest(approvedInfo);
+        payForm.checkIfWrongFormatOfField();
+    }
+
+    @Test
+    @DisplayName("Тест отправка с неправильным CVC ")
+    void shouldSendAnWrongFormCVC() {
+        var payForm = pageMain.payByDebitCard();
+        var approvedInfo = DataHelper.getWrongCVC();
+        payForm.fillFormNoSendRequest(approvedInfo);
+        payForm.checkIfWrongFormatOfField();
+    }
+
+    @Test
+    @DisplayName("Тест отправка со спец символами в поле Владелец ")
+    void shouldSendAnSpecialSymbolsFormOwner() {
+        var payForm = pageMain.payByDebitCard();
+        var approvedInfo = DataHelper.getSpecialSymbolsOwner();
+        payForm.fillFormNoSendRequest(approvedInfo);
+        payForm.checkIfWrongFormatOfField();
+    }
+
+    @Test
+    @DisplayName("Тест отправка с цифрами в поле Владелец ")
+    void shouldSendAnNumbersFormOwner() {
+        var payForm = pageMain.payByDebitCard();
+        var approvedInfo = DataHelper.getNumbersOwner();
+        payForm.fillFormNoSendRequest(approvedInfo);
+        payForm.checkIfWrongFormatOfField();
     }
 }

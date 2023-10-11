@@ -25,15 +25,9 @@ public class PagePayment {
     private SelenideElement errorNotification = $(withText("Ошибка! Банк отказал в проведении операции."));
     private SelenideElement invalidExpirationDate = $(withText("Неверно указан срок действия карты"));
     private SelenideElement cardExpired = $(withText("Истёк срок действия карты"));
-    private SelenideElement wrongFormat = $(".input__sub");
+    private SelenideElement checkWrongFormat = $(".input__sub");
     private SelenideElement requiredField = $(withText("Поле обязательно для заполнения"));
 
-
-    private SelenideElement invalidFormatCard = $$("span.input__sub").get(0);
-    private SelenideElement invalidMonth = $$("span.input__sub").get(1);
-    private SelenideElement invalidYear = $$("span.input__sub").get(2);
-    private SelenideElement invalidOwner = $$("span.input__sub").get(3);
-    private SelenideElement invalidCVV = $$("span.input__sub").get(4);
 
 
     public void fillingForm(DataHelper.CardInfo cardInfo) {
@@ -71,32 +65,13 @@ public class PagePayment {
         cardExpired.shouldBe(Condition.visible);
     }
 
-    public void checkWrongFormat() {
-        wrongFormat.shouldHave(text("Неверный формат"));
-    }
 
     public void checkRequiredField() {
         requiredField.shouldBe(Condition.visible);
     }
 
-    public void checkInvalidCardNumber() {
-        invalidFormatCard.shouldHave(text("Неверный формат"));
-    }
 
-    public void checkInvalidMonth() {
-        invalidMonth.shouldHave(text("Неверный формат"));
-    }
-
-    public void checkInvalidYear() {
-
-        invalidYear.shouldHave(text("Неверный формат"));
-    }
-
-    public void checkInvalidOwner() {
-        invalidOwner.shouldHave(text("Неверный формат"));
-    }
-
-    public void checkInvalidCvv() {
-        invalidCVV.shouldHave(text("Неверный формат"));
+    public void checkIfWrongFormatOfField() {
+        checkWrongFormat.shouldBe(Condition.visible);
     }
 }

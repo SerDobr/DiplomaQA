@@ -4,22 +4,21 @@ import com.codeborne.selenide.SelenideElement;
 
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$x;
 
 public class DashboardPage {
     private SelenideElement buyButton = $(byText("Купить"));
     private SelenideElement creditButton = $(byText("Купить в кредит"));
-    private SelenideElement paymentByCard = $(byText("Оплата по карте"));
-    private SelenideElement paymentByCreditCard = $(byText("Кредит по данным карты"));
+    private static final SelenideElement formHeading = $x("//*[@id=\"root\"]/div/h3");
 
     public PagePayment payByDebitCard() {
         buyButton.click();
-        paymentByCard.shouldHave(Condition.visible);
+        formHeading.shouldHave(Condition.visible,Condition.text("Оплата по карте"));
         return new PagePayment();
     }
-
     public PagePayment payCreditByCard() {
         creditButton.click();
-        paymentByCreditCard.shouldHave(Condition.visible);
+        formHeading.shouldHave(Condition.visible,Condition.text("Кредит по данным карты"));
         return new PagePayment();
     }
 }
